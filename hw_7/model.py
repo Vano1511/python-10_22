@@ -3,7 +3,7 @@ import json
 
 names = ('Фамилия', 'Имя', 'Телефон', 'Описание')
 
-def add_unit():   #  функция добавляет одну запись в справочник, введенную вручную
+def add_contact():   #  функция добавляет одну запись в справочник, введенную вручную
     global names
     print('Новый контакт: ')
     new_string = []
@@ -31,7 +31,8 @@ def add_unit():   #  функция добавляет одну запись в 
 def sorting():  # метод, сортирующий телефонный справочник по алфавиту
     file = open('phones.csv', encoding='utf-8')   # открываем, чтобы считать
     strings = file.readlines()
-    spam = strings.pop(0)   # удаляем шапку
+    spam = strings.pop(0)  # удаляем шапку
+    strings = list(set(strings))  #  избавляемся от одинаковых записей
     strings.sort()
     strings.insert(0, spam)  # вставляем шапку в отсортированный справочник
     file.close()
@@ -39,7 +40,6 @@ def sorting():  # метод, сортирующий телефонный спр
     for string in strings:
         file.write(string)
     file.close()
-    print('справочник отсортирован ')
 
 def export_to_json(filename, json_filename):  #  метод, экспортирующий наш справочник в json-файл
     global names
@@ -53,7 +53,7 @@ def export_to_json(filename, json_filename):  #  метод, экспортир�
             counter += 1
     with open(json_filename, 'w') as json_file:
         json.dump(phones_dict, json_file, indent=4, ensure_ascii=False) # непосредственно запись
-    print('перенос справочника в phones.json осуществлен, файл перезаписан')
+    print(f'перенос справочника в файл {json_filename} осуществлен. Для его появления выйдите из приложения ')
 
 def import_from_json(json_filename): # метод, импортирующий новый спрвочник из json формата
     with open(json_filename) as json_file:
@@ -79,14 +79,14 @@ def import_new_book(filename):
         file.writelines(strings_out)
     print('новые контакты успешно добавлены')
 
-def delete_unit(person):
+def delete_contact(person):
     file = open('phones.csv', encoding='utf-8')  # открываем, чтобы считать
     strings = file.readlines()
     file.close()
     for string in strings:
         if person in string:
             strings.remove(string)
-            break
+            break                    # как удалили - заканчиваем поиск
     person = person.split(sep=',')
     str_person = str(person[0]) + ' ' + str(person[1])
     file = open('phones.csv', 'w', encoding='utf-8')  # перезаписываем файл
@@ -95,9 +95,10 @@ def delete_unit(person):
     print(f'Пользователь {str_person} удален ')
 
 
-# add_unit()
-# sorting()
+# add_contact()
+
 # export_to_json('phones.csv', 'phones.json')
 # import_from_json('new.json')
-# delete_unit('Ботан,Андрей')
+# delete_contact('Ботан,Андрей')
 # import_new_book('new_phones.csv')
+# sorting()
