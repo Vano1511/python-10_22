@@ -2,7 +2,7 @@ import model
 import viewer
 import telebot
 
-bot = telebot.TeleBot('5853157983:AAEADV2IBVDWa1Ruu8pGlNFqKECOcUTdPyo')
+bot = telebot.TeleBot(some_token)
 person = None
 mess = None
 @bot.message_handler(commands=['start', 'help'])
